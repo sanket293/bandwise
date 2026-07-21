@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Contract every exam (IELTS, and later CELPIP/PTE/TOEFL) must implement.
 ///
@@ -33,6 +34,22 @@ abstract class ExamModule {
 
   /// The exam's rubric reference screen (Rubric Reference pillar).
   Widget buildRubricsPage(BuildContext context);
+
+  /// Ensures any data needed by [autoBandForRaw] is loaded. The log editor
+  /// awaits this so the auto-derived band is available immediately. Default
+  /// no-op for exams that need no data.
+  Future<void> warmUp(WidgetRef ref) async {}
+
+  /// For a raw-based module, the band that a raw score maps to (using this
+  /// exam's conversion tables). Returns null when the module isn't raw-based or
+  /// data isn't ready — the log editor then falls back to manual band entry.
+  double? autoBandForRaw(
+    WidgetRef ref, {
+    required String moduleId,
+    String? variantId,
+    required int raw,
+  }) =>
+      null;
 }
 
 /// A selectable exam variant (e.g. Academic).

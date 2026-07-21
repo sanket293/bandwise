@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/exam/exam_module.dart';
+import 'domain/ielts_models.dart' as models;
+import 'presentation/ielts_providers.dart';
 import 'presentation/ielts_rubrics_page.dart';
 import 'presentation/ielts_simulator_page.dart';
 
@@ -47,4 +50,26 @@ class IeltsModule implements ExamModule {
 
   @override
   Widget buildRubricsPage(BuildContext context) => const IeltsRubricsPage();
+
+  @override
+  Future<void> warmUp(WidgetRef ref) => ref.read(ieltsDataProvider.future);
+
+  @override
+  double? autoBandForRaw(
+    WidgetRef ref, {
+    required String moduleId,
+    String? variantId,
+    required int raw,
+  }) {
+    // Only Listening and Reading are raw-based; Writing/Speaking/Full are not.
+    final isListening = moduleId == 'listening';
+    final isReading = moduleId == 'reading';
+    if (!isListening && !isReading) return null;
+    final data = ref.read(ieltsDataProvider).valueOrNull;
+    if (data == null) return null;
+    final table = isListening
+        ? data.listening
+        : data.readingFor(models.IeltsVariant.fromId(variantId ?? 'academic'));
+    return table.bandForRaw(raw.clamp(0, table.rawMax));
+  }
 }

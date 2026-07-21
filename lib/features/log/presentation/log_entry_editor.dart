@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/exam/exam_module.dart';
 import '../../../core/exam/exam_registry.dart';
+import '../../../core/theme/app_theme.dart';
 import '../data/log_database.dart';
 import '../data/log_providers.dart';
 import 'log_format.dart';
@@ -46,10 +47,22 @@ class _LogEntryEditorState extends ConsumerState<LogEntryEditor> {
     _source = TextEditingController(text: e?.source ?? '');
     _notes = TextEditingController(text: e?.notes ?? '');
     _tags = TextEditingController(text: e?.tags ?? '');
-    _rawScore = e?.rawScore;
+    _rawScore = e?.rawScore ?? 30;
     _bandScore = e?.bandScore;
     _date = e?.date ?? DateTime.now();
+    // Warm the exam's conversion data so the auto-derived band shows at once.
+    _exam.warmUp(ref).then((_) {
+      if (mounted) setState(() {});
+    });
   }
+
+  /// The band auto-derived from the current raw score, for raw-based modules.
+  double? get _autoBand => _exam.autoBandForRaw(
+        ref,
+        moduleId: _moduleId,
+        variantId: _variantId,
+        raw: _rawScore ?? 0,
+      );
 
   @override
   void dispose() {
@@ -67,33 +80,45 @@ class _LogEntryEditorState extends ConsumerState<LogEntryEditor> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_rawScore == null && _bandScore == null) {
+
+    // Raw-based modules: band is auto-derived from the raw score.
+    // Others (Writing / Speaking / Full Test): band is chosen manually.
+    final int? rawToSave = _isRawBased ? (_rawScore ?? 0) : null;
+    final double? bandToSave = _isRawBased ? _autoBand : _bandScore;
+
+    if (!_isRawBased && bandToSave == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a raw score and/or a band.')),
+        const SnackBar(content: Text('Select a band.')),
       );
       return;
     }
+    if (_isRawBased && bandToSave == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Score data is still loading — try again.')),
+      );
+      return;
+    }
+
     final db = ref.read(logDatabaseProvider);
-    final companion = LogEntriesCompanion(
-      examId: Value(_exam.id),
-      variantId: Value(_variantId),
-      moduleId: Value(_moduleId),
-      source: Value(_source.text.trim()),
-      rawScore: Value(_isRawBased ? _rawScore : null),
-      bandScore: Value(_bandScore),
-      date: Value(_date),
-      notes: Value(_notes.text.trim()),
-      tags: Value(_tags.text.trim()),
-    );
     if (widget.existing == null) {
-      await db.insertEntry(companion);
+      await db.insertEntry(LogEntriesCompanion(
+        examId: Value(_exam.id),
+        variantId: Value(_variantId),
+        moduleId: Value(_moduleId),
+        source: Value(_source.text.trim()),
+        rawScore: Value(rawToSave),
+        bandScore: Value(bandToSave),
+        date: Value(_date),
+        notes: Value(_notes.text.trim()),
+        tags: Value(_tags.text.trim()),
+      ));
     } else {
       await db.updateEntry(widget.existing!.copyWith(
         variantId: Value(_variantId),
         moduleId: _moduleId,
         source: _source.text.trim(),
-        rawScore: Value(_isRawBased ? _rawScore : null),
-        bandScore: Value(_bandScore),
+        rawScore: Value(rawToSave),
+        bandScore: Value(bandToSave),
         date: _date,
         notes: _notes.text.trim(),
         tags: _tags.text.trim(),
@@ -155,6 +180,7 @@ class _LogEntryEditorState extends ConsumerState<LogEntryEditor> {
             ),
             const SizedBox(height: 16),
             if (_isRawBased) ...[
+              // Raw-based modules: enter the raw score; the band is derived.
               _Label('Raw score (out of 40)'),
               _RawStepper(
                 value: _rawScore ?? 30,
@@ -162,18 +188,23 @@ class _LogEntryEditorState extends ConsumerState<LogEntryEditor> {
                 onChanged: (v) => setState(() => _rawScore = v),
               ),
               const SizedBox(height: 16),
+              _Label('Band (from raw score)'),
+              _AutoBandDisplay(band: _autoBand),
+            ] else ...[
+              // Writing / Speaking / Full Test: choose the band manually.
+              _Label('Band achieved'),
+              DropdownButtonFormField<double?>(
+                initialValue: _bandScore,
+                decoration: const InputDecoration(hintText: 'Select band'),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('— select —')),
+                  for (final b in _bandSteps)
+                    DropdownMenuItem(
+                        value: b, child: Text('Band ${LogFormat.band(b)}')),
+                ],
+                onChanged: (v) => setState(() => _bandScore = v),
+              ),
             ],
-            _Label('Band achieved'),
-            DropdownButtonFormField<double?>(
-              initialValue: _bandScore,
-              decoration: const InputDecoration(hintText: 'Select band'),
-              items: [
-                const DropdownMenuItem(value: null, child: Text('— none —')),
-                for (final b in _bandSteps)
-                  DropdownMenuItem(value: b, child: Text('Band ${LogFormat.band(b)}')),
-              ],
-              onChanged: (v) => setState(() => _bandScore = v),
-            ),
             const SizedBox(height: 16),
             _Label('Date'),
             OutlinedButton.icon(
@@ -226,6 +257,45 @@ class _Label extends StatelessWidget {
                 fontSize: 13,
                 color: Theme.of(context).colorScheme.onSurfaceVariant)),
       );
+}
+
+/// Read-only display of the band auto-derived from the raw score.
+class _AutoBandDisplay extends StatelessWidget {
+  const _AutoBandDisplay({required this.band});
+  final double? band;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final ready = band != null;
+    final color = ready ? AppTheme.bandColor(band!, scheme) : scheme.onSurfaceVariant;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Icon(ready ? Icons.auto_awesome : Icons.hourglass_empty,
+              size: 18, color: color),
+          const SizedBox(width: 10),
+          Text(
+            ready ? 'Band ${LogFormat.band(band!)}' : 'Calculating…',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: color),
+          ),
+          const Spacer(),
+          Text('auto',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: scheme.onSurfaceVariant)),
+        ],
+      ),
+    );
+  }
 }
 
 class _RawStepper extends StatelessWidget {
