@@ -1,0 +1,18 @@
+{
+  "exam": "ielts",
+  "type": "overall_band_descriptors",
+  "version": "2024.1",
+  "source": "IELTS public band-score descriptors (band names are the official published designations). Descriptions are faithful summaries; consult the official IELTS band descriptor documents for authoritative wording.",
+  "bands": [
+    { "band": 9.0, "name": "Expert user", "summary": "Has fully operational command of the language: appropriate, accurate and fluent with complete understanding." },
+    { "band": 8.0, "name": "Very good user", "summary": "Has fully operational command with only occasional unsystematic inaccuracies and inappropriate usage. Misunderstandings may occur in unfamiliar situations. Handles complex, detailed argumentation well." },
+    { "band": 7.0, "name": "Good user", "summary": "Has operational command of the language, though with occasional inaccuracies, inappropriate usage and misunderstandings in some situations. Generally handles complex language well and understands detailed reasoning." },
+    { "band": 6.0, "name": "Competent user", "summary": "Has generally effective command of the language despite some inaccuracies, inappropriate usage and misunderstandings. Can use and understand fairly complex language, particularly in familiar situations." },
+    { "band": 5.0, "name": "Modest user", "summary": "Has partial command of the language, coping with overall meaning in most situations, though likely to make many mistakes. Should be able to handle basic communication in own field." },
+    { "band": 4.0, "name": "Limited user", "summary": "Basic competence is limited to familiar situations. Has frequent problems in understanding and expression. Is not able to use complex language." },
+    { "band": 3.0, "name": "Extremely limited user", "summary": "Conveys and understands only general meaning in very familiar situations. Frequent breakdowns in communication occur." },
+    { "band": 2.0, "name": "Intermittent user", "summary": "Has great difficulty understanding spoken and written English. No real communication is possible except for the most basic information using isolated words or short formulae in familiar situations and to meet immediate needs." },
+    { "band": 1.0, "name": "Non-user", "summary": "Essentially has no ability to use the language beyond possibly a few isolated words." },
+    { "band": 0.0, "name": "Did not attempt the test", "summary": "No assessable information provided." }
+  ]
+}

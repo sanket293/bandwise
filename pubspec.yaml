@@ -1,0 +1,86 @@
+name: bandwise
+description: "BandWise — offline-first exam score simulator & prep tracker (IELTS-first, multi-exam by design)."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # --- State management ---
+  # Riverpod: compile-safe, low-boilerplate reactive state. Powers the live-updating
+  # simulator and keeps the core app exam-agnostic. (Chosen over Bloc for lower ceremony.)
+  flutter_riverpod: ^2.6.1
+
+  # --- Local database (offline-first, no backend) ---
+  # Drift: typed SQLite. Needed for the Practice Log's search / date-range / score-range
+  # filters and calendar aggregation, which map naturally to SQL.
+  drift: ^2.28.2
+  sqlite3_flutter_libs: ^0.5.42
+  path_provider: ^2.1.5
+  path: ^1.9.1
+
+  # --- Charts ---
+  # fl_chart: lightweight, custom-painter-based. Used for the raw→band conversion chart
+  # (with a highlighted marker) and the progress trend lines.
+  fl_chart: ^1.1.1
+
+  # --- Ads ---
+  # Google Mobile Ads: banner + app-open + rewarded. Wired with Google's official TEST
+  # ad unit IDs behind lib/core/ads/ad_config.dart — swap for real IDs before release.
+  google_mobile_ads: ^6.0.0
+
+  # --- Small utilities ---
+  intl: ^0.20.2           # date formatting for log/calendar
+  shared_preferences: ^2.3.5  # lightweight app settings (theme, exam variant, onboarding)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Drift + Riverpod codegen
+  build_runner: ^2.4.13
+  drift_dev: ^2.28.2
+
+  # Icon + splash generators (dev-time only; sources live in assets/branding/,
+  # produced by tool/gen_branding.py).
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.6
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/ielts/
+    - assets/rubrics/ielts/
+
+# --- App icon (run: dart run flutter_launcher_icons) ---
+flutter_launcher_icons:
+  image_path: "assets/branding/icon.png"
+  # iOS: opaque square, system applies the squircle mask.
+  ios: true
+  remove_alpha_ios: true
+  # Android: adaptive icon (gradient bg layer + safe-zone mark fg layer),
+  # plus a legacy square fallback.
+  android: "ic_launcher"
+  adaptive_icon_background: "assets/branding/icon_background.png"
+  adaptive_icon_foreground: "assets/branding/icon_foreground.png"
+  min_sdk_android: 21
+
+# --- Splash screen (run: dart run flutter_native_splash:create) ---
+flutter_native_splash:
+  color: "#1E9696"
+  color_dark: "#141B3C"
+  image: "assets/branding/splash_logo.png"
+  image_dark: "assets/branding/splash_logo_dark.png"
+  android_12:
+    image: "assets/branding/splash_logo.png"
+    image_dark: "assets/branding/splash_logo_dark.png"
+    color: "#1E9696"
+    color_dark: "#141B3C"
+  fullscreen: true

@@ -1,0 +1,29 @@
+{
+  "exam": "ielts",
+  "module": "listening",
+  "appliesTo": ["academic", "general_training"],
+  "rawMax": 40,
+  "version": "2024.1",
+  "source": "Indicative band boundaries published in official Cambridge IELTS practice-test books. IELTS does not publish a single fixed conversion table; boundaries vary slightly between test versions. Treat as approximate.",
+  "isIndicative": true,
+  "bands": [
+    { "rawMin": 39, "rawMax": 40, "band": 9.0 },
+    { "rawMin": 37, "rawMax": 38, "band": 8.5 },
+    { "rawMin": 35, "rawMax": 36, "band": 8.0 },
+    { "rawMin": 32, "rawMax": 34, "band": 7.5 },
+    { "rawMin": 30, "rawMax": 31, "band": 7.0 },
+    { "rawMin": 26, "rawMax": 29, "band": 6.5 },
+    { "rawMin": 23, "rawMax": 25, "band": 6.0 },
+    { "rawMin": 18, "rawMax": 22, "band": 5.5 },
+    { "rawMin": 16, "rawMax": 17, "band": 5.0 },
+    { "rawMin": 13, "rawMax": 15, "band": 4.5 },
+    { "rawMin": 11, "rawMax": 12, "band": 4.0 },
+    { "rawMin": 8, "rawMax": 10, "band": 3.5 },
+    { "rawMin": 6, "rawMax": 7, "band": 3.0 },
+    { "rawMin": 4, "rawMax": 5, "band": 2.5 },
+    { "rawMin": 3, "rawMax": 3, "band": 2.0 },
+    { "rawMin": 2, "rawMax": 2, "band": 1.5 },
+    { "rawMin": 1, "rawMax": 1, "band": 1.0 },
+    { "rawMin": 0, "rawMax": 0, "band": 0.0 }
+  ]
+}

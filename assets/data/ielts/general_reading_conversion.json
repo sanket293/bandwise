@@ -1,0 +1,29 @@
+{
+  "exam": "ielts",
+  "module": "reading",
+  "appliesTo": ["general_training"],
+  "rawMax": 40,
+  "version": "2024.1",
+  "source": "Indicative band boundaries published in official Cambridge IELTS (General Training) practice-test books. GT Reading requires more correct answers than Academic for the same band. IELTS does not publish a single fixed conversion table; boundaries vary slightly between test versions. Treat as approximate.",
+  "isIndicative": true,
+  "bands": [
+    { "rawMin": 40, "rawMax": 40, "band": 9.0 },
+    { "rawMin": 39, "rawMax": 39, "band": 8.5 },
+    { "rawMin": 37, "rawMax": 38, "band": 8.0 },
+    { "rawMin": 36, "rawMax": 36, "band": 7.5 },
+    { "rawMin": 34, "rawMax": 35, "band": 7.0 },
+    { "rawMin": 32, "rawMax": 33, "band": 6.5 },
+    { "rawMin": 30, "rawMax": 31, "band": 6.0 },
+    { "rawMin": 27, "rawMax": 29, "band": 5.5 },
+    { "rawMin": 23, "rawMax": 26, "band": 5.0 },
+    { "rawMin": 19, "rawMax": 22, "band": 4.5 },
+    { "rawMin": 15, "rawMax": 18, "band": 4.0 },
+    { "rawMin": 12, "rawMax": 14, "band": 3.5 },
+    { "rawMin": 9, "rawMax": 11, "band": 3.0 },
+    { "rawMin": 6, "rawMax": 8, "band": 2.5 },
+    { "rawMin": 4, "rawMax": 5, "band": 2.0 },
+    { "rawMin": 2, "rawMax": 3, "band": 1.5 },
+    { "rawMin": 1, "rawMax": 1, "band": 1.0 },
+    { "rawMin": 0, "rawMax": 0, "band": 0.0 }
+  ]
+}

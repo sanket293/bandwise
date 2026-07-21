@@ -1,0 +1,124 @@
+{
+  "exam": "ielts",
+  "type": "writing_rubric",
+  "version": "2024.1",
+  "source": "Faithful summaries of the IELTS Writing band descriptors (public versions). For authoritative wording, refer to the official 'IELTS Writing Task 1/Task 2 band descriptors (public version)' PDFs.",
+  "tasks": [
+    {
+      "task": "Task 1",
+      "note": "Academic Task 1 asks you to describe visual information (graph/table/chart/diagram/map/process). General Training Task 1 asks you to write a letter. Assessed on the four criteria below.",
+      "criteria": [
+        {
+          "name": "Task Achievement",
+          "abbr": "TA",
+          "bands": [
+            { "band": 9.0, "text": "Fully satisfies all requirements; clearly and fully presents a well-developed response." },
+            { "band": 8.0, "text": "Covers all requirements sufficiently; clearly presents and highlights key features/bullet points; could be more fully extended." },
+            { "band": 7.0, "text": "Covers the requirements; clearly presents and highlights key features but could be more fully extended; (Academic) may over/under-generalise; (GT) may be inconsistencies in tone." },
+            { "band": 6.0, "text": "Addresses the requirements; presents an overview with information appropriately selected; details may be inappropriately focused, inaccurate, or irrelevant." },
+            { "band": 5.0, "text": "Generally addresses the task; format may be inappropriate; no clear overview; recounts detail mechanically with no clear key features; may be inaccuracy in details." },
+            { "band": 4.0, "text": "Attempts the task but does not cover all key features; may confuse key features with detail; format may be inappropriate." },
+            { "band": 3.0, "text": "Fails to address the task, which may have been completely misunderstood; presents limited ideas which may be largely irrelevant/repetitive." }
+          ]
+        },
+        {
+          "name": "Coherence & Cohesion",
+          "abbr": "CC",
+          "bands": [
+            { "band": 9.0, "text": "Uses cohesion so skilfully it attracts no attention; paragraphing is skilfully managed." },
+            { "band": 8.0, "text": "Sequences information and ideas logically; manages all aspects of cohesion well; uses paragraphing sufficiently and appropriately." },
+            { "band": 7.0, "text": "Logically organises information; clear progression throughout; uses a range of cohesive devices appropriately though there may be some under-/over-use." },
+            { "band": 6.0, "text": "Arranges information coherently with clear overall progression; uses cohesive devices effectively but cohesion within/between sentences may be faulty or mechanical." },
+            { "band": 5.0, "text": "Presents information with some organisation but there may be a lack of overall progression; makes inadequate, inaccurate or over-use of cohesive devices." },
+            { "band": 4.0, "text": "Presents information and ideas but these are not arranged coherently and there is no clear progression in the response." },
+            { "band": 3.0, "text": "Does not organise ideas logically; may use a very limited range of cohesive devices, and those used may not indicate a logical relationship between ideas." }
+          ]
+        },
+        {
+          "name": "Lexical Resource",
+          "abbr": "LR",
+          "bands": [
+            { "band": 9.0, "text": "Uses a wide range of vocabulary with very natural and sophisticated control of lexical features; rare minor errors occur only as slips." },
+            { "band": 8.0, "text": "Uses a wide range of vocabulary fluently and flexibly to convey precise meanings; skilfully uses uncommon lexical items but there may be occasional inaccuracies in word choice/collocation; produces rare errors in spelling/word formation." },
+            { "band": 7.0, "text": "Uses a sufficient range of vocabulary to allow some flexibility and precision; uses less common lexical items with some awareness of style and collocation; may produce occasional errors in word choice, spelling and/or word formation." },
+            { "band": 6.0, "text": "Uses an adequate range of vocabulary for the task; attempts to use less common vocabulary but with some inaccuracy; makes some errors in spelling and/or word formation but they do not impede communication." },
+            { "band": 5.0, "text": "Uses a limited range of vocabulary, but this is minimally adequate for the task; may make noticeable errors in spelling and/or word formation that may cause some difficulty for the reader." },
+            { "band": 4.0, "text": "Uses only basic vocabulary which may be used repetitively or which may be inappropriate for the task; has limited control of word formation and/or spelling; errors may cause strain for the reader." },
+            { "band": 3.0, "text": "Uses only a very limited range of words and expressions with very limited control of word formation and/or spelling; errors may severely distort the message." }
+          ]
+        },
+        {
+          "name": "Grammatical Range & Accuracy",
+          "abbr": "GRA",
+          "bands": [
+            { "band": 9.0, "text": "Uses a wide range of structures with full flexibility and accuracy; rare minor errors occur only as slips." },
+            { "band": 8.0, "text": "Uses a wide range of structures; the majority of sentences are error-free; makes only very occasional errors or inappropriacies." },
+            { "band": 7.0, "text": "Uses a variety of complex structures; produces frequent error-free sentences; has good control of grammar and punctuation but may make a few errors." },
+            { "band": 6.0, "text": "Uses a mix of simple and complex sentence forms; makes some errors in grammar and punctuation but they rarely reduce communication." },
+            { "band": 5.0, "text": "Uses only a limited range of structures; attempts complex sentences but these tend to be less accurate than simple sentences; may make frequent grammatical errors and punctuation may be faulty." },
+            { "band": 4.0, "text": "Uses only a very limited range of structures with only rare use of subordinate clauses; some structures are accurate but errors predominate, and punctuation is often faulty." },
+            { "band": 3.0, "text": "Attempts sentence forms but errors in grammar and punctuation predominate and distort the meaning." }
+          ]
+        }
+      ]
+    },
+    {
+      "task": "Task 2",
+      "note": "An essay responding to a point of view, argument or problem. Assessed on the four criteria below. Task 2 is weighted more heavily than Task 1 in the Writing score.",
+      "criteria": [
+        {
+          "name": "Task Response",
+          "abbr": "TR",
+          "bands": [
+            { "band": 9.0, "text": "Fully addresses all parts of the task; presents a fully developed position in answer to the question with relevant, fully extended and well-supported ideas." },
+            { "band": 8.0, "text": "Sufficiently addresses all parts of the task; presents a well-developed response to the question with relevant, extended and supported ideas." },
+            { "band": 7.0, "text": "Addresses all parts of the task; presents a clear position throughout; presents, extends and supports main ideas, but there may be a tendency to over-generalise and/or supporting ideas may lack focus." },
+            { "band": 6.0, "text": "Addresses all parts of the task although some parts may be more fully covered than others; presents a relevant position although the conclusions may become unclear or repetitive; relevant main ideas but some may be inadequately developed/unclear." },
+            { "band": 5.0, "text": "Addresses the task only partially; the format may be inappropriate in places; expresses a position but the development is not always clear and there may be no conclusions drawn; presents some main ideas but these are limited and not sufficiently developed." },
+            { "band": 4.0, "text": "Responds to the task only in a minimal way or the answer is tangential; the format may be inappropriate; presents a position but this is unclear; presents some main ideas but these are difficult to identify and may be repetitive, irrelevant or not well supported." },
+            { "band": 3.0, "text": "Does not adequately address any part of the task; does not express a clear position; presents few ideas, which are largely undeveloped or irrelevant." }
+          ]
+        },
+        {
+          "name": "Coherence & Cohesion",
+          "abbr": "CC",
+          "bands": [
+            { "band": 9.0, "text": "Uses cohesion so skilfully it attracts no attention; skilfully manages paragraphing." },
+            { "band": 8.0, "text": "Sequences information and ideas logically; manages all aspects of cohesion well; uses paragraphing sufficiently and appropriately." },
+            { "band": 7.0, "text": "Logically organises information and ideas with clear progression throughout; uses a range of cohesive devices appropriately although there may be some under-/over-use; presents a clear central topic within each paragraph." },
+            { "band": 6.0, "text": "Arranges information and ideas coherently with clear overall progression; uses cohesive devices effectively but cohesion within/between sentences may be faulty or mechanical; may not always use referencing clearly; paragraphing may not always be logical." },
+            { "band": 5.0, "text": "Presents information with some organisation but there may be a lack of overall progression; makes inadequate, inaccurate or over-use of cohesive devices; may be repetitive due to lack of referencing/substitution; may not write in paragraphs, or paragraphing may be inadequate." },
+            { "band": 4.0, "text": "Presents information and ideas but these are not arranged coherently and there is no clear progression; uses some basic cohesive devices but these may be inaccurate or repetitive; may not write in paragraphs or their use may be confusing." },
+            { "band": 3.0, "text": "Does not organise ideas logically; may use a very limited range of cohesive devices, and those used may not indicate a logical relationship between ideas." }
+          ]
+        },
+        {
+          "name": "Lexical Resource",
+          "abbr": "LR",
+          "bands": [
+            { "band": 9.0, "text": "Uses a wide range of vocabulary with very natural and sophisticated control of lexical features; rare minor errors occur only as slips." },
+            { "band": 8.0, "text": "Uses a wide range of vocabulary fluently and flexibly to convey precise meanings; skilfully uses uncommon lexical items but there may be occasional inaccuracies in word choice and collocation; produces rare errors in spelling and/or word formation." },
+            { "band": 7.0, "text": "Uses a sufficient range of vocabulary to allow some flexibility and precision; uses less common lexical items with some awareness of style and collocation; may produce occasional errors in word choice, spelling and/or word formation." },
+            { "band": 6.0, "text": "Uses an adequate range of vocabulary for the task; attempts to use less common vocabulary but with some inaccuracy; makes some errors in spelling and/or word formation, but they do not impede communication." },
+            { "band": 5.0, "text": "Uses a limited range of vocabulary, but this is minimally adequate for the task; may make noticeable errors in spelling and/or word formation that may cause some difficulty for the reader." },
+            { "band": 4.0, "text": "Uses only basic vocabulary which may be used repetitively or which may be inappropriate for the task; has limited control of word formation and/or spelling; errors may cause strain for the reader." },
+            { "band": 3.0, "text": "Uses only a very limited range of words and expressions with very limited control of word formation and/or spelling; errors may severely distort the message." }
+          ]
+        },
+        {
+          "name": "Grammatical Range & Accuracy",
+          "abbr": "GRA",
+          "bands": [
+            { "band": 9.0, "text": "Uses a wide range of structures with full flexibility and accuracy; rare minor errors occur only as slips." },
+            { "band": 8.0, "text": "Uses a wide range of structures; the majority of sentences are error-free; makes only very occasional errors or inappropriacies." },
+            { "band": 7.0, "text": "Uses a variety of complex structures; produces frequent error-free sentences; has good control of grammar and punctuation but may make a few errors." },
+            { "band": 6.0, "text": "Uses a mix of simple and complex sentence forms; makes some errors in grammar and punctuation but they rarely reduce communication." },
+            { "band": 5.0, "text": "Uses only a limited range of structures; attempts complex sentences but these tend to be less accurate than simple sentences; may make frequent grammatical errors and punctuation may be faulty." },
+            { "band": 4.0, "text": "Uses only a very limited range of structures with only rare use of subordinate clauses; some structures are accurate but errors predominate, and punctuation is often faulty." },
+            { "band": 3.0, "text": "Attempts sentence forms but errors in grammar and punctuation predominate and distort the meaning." }
+          ]
+        }
+      ]
+    }
+  ]
+}
