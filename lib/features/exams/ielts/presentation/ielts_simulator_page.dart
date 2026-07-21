@@ -175,12 +175,14 @@ class _OverallResultCard extends StatelessWidget {
                       fontSize: 56, fontWeight: FontWeight.w800, color: color, height: 1),
                 ),
                 const SizedBox(width: 12),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    descriptor.name,
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w700, color: scheme.onSurface),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      descriptor.name,
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700, color: scheme.onSurface),
+                    ),
                   ),
                 ),
               ],
@@ -311,14 +313,17 @@ class _LookupResult extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text('${lookup.raw}/40 → ',
+            Text.rich(
+              TextSpan(children: [
+                TextSpan(
+                    text: '${lookup.raw}/40 → ',
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                Text('$moduleLabel Band ${IeltsScoring.formatBand(lookup.primaryBand)}',
+                TextSpan(
+                    text:
+                        '$moduleLabel Band ${IeltsScoring.formatBand(lookup.primaryBand)}',
                     style: TextStyle(
                         fontSize: 18, fontWeight: FontWeight.w800, color: color)),
-              ],
+              ]),
             ),
             const Divider(height: 20),
             Text('Same raw score elsewhere',
