@@ -52,13 +52,20 @@ void main() {
     await tester.tap(find.text('Reading'));
     await tester.pumpAndSettle();
 
-    expect(find.text('General Training'), findsOneWidget);
+    expect(find.text('General'), findsOneWidget);
 
     // Toggle to General Training.
-    await tester.tap(find.text('General Training'));
+    await tester.tap(find.text('General'));
     await tester.pumpAndSettle();
 
-    // If the SegmentedButton overflowed, tester would already have thrown.
+    // Switch the conversion view to the Table and back to the Graph.
+    await tester.tap(find.text('Table'));
+    await tester.pumpAndSettle();
+    expect(find.text('Raw score'), findsWidgets); // table header rendered
+    await tester.tap(find.text('Graph'));
+    await tester.pumpAndSettle();
+
+    // If any layout overflowed, tester would already have thrown.
     expect(tester.takeException(), isNull);
   });
 }

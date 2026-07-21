@@ -88,20 +88,7 @@ final modeBModuleProvider =
 /// The raw score (out of 40) the user has entered.
 final modeBRawProvider = StateProvider<int>((ref) => 30);
 
-/// Live raw-score lookup for Mode B (null while data still loading).
-final modeBLookupProvider = Provider<RawScoreLookup?>((ref) {
-  final dataAsync = ref.watch(ieltsDataProvider);
-  return dataAsync.whenOrNull(data: (data) {
-    final module = ref.watch(modeBModuleProvider);
-    final variant = ref.watch(ieltsVariantProvider);
-    final raw = ref.watch(modeBRawProvider);
-    return IeltsScoring.rawScoreLookup(
-      raw: raw,
-      module: module,
-      variant: module == IeltsModule.reading ? variant : null,
-      listeningTable: data.listening,
-      academicReadingTable: data.academicReading,
-      generalReadingTable: data.generalReading,
-    );
-  });
-});
+/// Whether Mode B shows the conversion as a graph or a table.
+enum ModeBView { graph, table }
+
+final modeBViewProvider = StateProvider<ModeBView>((ref) => ModeBView.graph);

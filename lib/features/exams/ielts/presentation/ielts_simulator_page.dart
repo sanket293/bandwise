@@ -229,14 +229,19 @@ class _ModeBView extends ConsumerWidget {
     final module = ref.watch(modeBModuleProvider);
     final variant = ref.watch(ieltsVariantProvider);
     final raw = ref.watch(modeBRawProvider);
-    final lookup = ref.watch(modeBLookupProvider);
+    final view = ref.watch(modeBViewProvider);
     final table =
         module == IeltsModule.listening ? data.listening : data.readingFor(variant);
+    final band = table.bandForRaw(raw);
+    final moduleLabel =
+        module == IeltsModule.listening ? 'Listening' : '${variant.label} Reading';
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       children: [
+        // 1) Which module — and, for Reading only, which test type.
         SegmentedButton<IeltsModule>(
+          showSelectedIcon: false,
           segments: const [
             ButtonSegment(value: IeltsModule.listening, label: Text('Listening')),
             ButtonSegment(value: IeltsModule.reading, label: Text('Reading')),
@@ -246,14 +251,29 @@ class _ModeBView extends ConsumerWidget {
               ref.read(modeBModuleProvider.notifier).state = s.first,
         ),
         if (module == IeltsModule.reading) ...[
-          const SizedBox(height: 12),
-          const ExamVariantSelector(
-              subtitle: 'Academic and General Training use different Reading tables.'),
+          const SizedBox(height: 10),
+          SegmentedButton<IeltsVariant>(
+            showSelectedIcon: false,
+            segments: const [
+              ButtonSegment(value: IeltsVariant.academic, label: Text('Academic')),
+              ButtonSegment(
+                  value: IeltsVariant.generalTraining, label: Text('General')),
+            ],
+            selected: {variant},
+            onSelectionChanged: (s) =>
+                ref.read(ieltsVariantProvider.notifier).state = s.first,
+          ),
         ],
         const SizedBox(height: 20),
+
+        // 2) The one clear answer.
+        _BandResultCard(band: band, moduleLabel: moduleLabel, raw: raw),
+        const SizedBox(height: 20),
+
+        // 3) Adjust the raw score.
         Row(
           children: [
-            Text('Raw score', style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text('Your raw score', style: TextStyle(fontWeight: FontWeight.w600)),
             const Spacer(),
             Text('$raw / 40',
                 style: TextStyle(
@@ -268,22 +288,36 @@ class _ModeBView extends ConsumerWidget {
           label: '$raw',
           onChanged: (v) => ref.read(modeBRawProvider.notifier).state = v.round(),
         ),
-        if (lookup != null) _LookupResult(lookup: lookup),
-        const SizedBox(height: 20),
+        const SizedBox(height: 8),
+
+        // 4) See it as a graph or a table — user's choice.
+        Center(
+          child: SegmentedButton<ModeBView>(
+            showSelectedIcon: false,
+            segments: const [
+              ButtonSegment(
+                  value: ModeBView.graph,
+                  label: Text('Graph'),
+                  icon: Icon(CupertinoIcons.graph_square)),
+              ButtonSegment(
+                  value: ModeBView.table,
+                  label: Text('Table'),
+                  icon: Icon(CupertinoIcons.list_bullet)),
+            ],
+            selected: {view},
+            onSelectionChanged: (s) =>
+                ref.read(modeBViewProvider.notifier).state = s.first,
+          ),
+        ),
+        const SizedBox(height: 12),
         Card(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 16, 16, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 8),
-                  child: Text('Conversion chart',
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                ),
-                ConversionChart(table: table, highlightRaw: raw),
-              ],
-            ),
+            padding: view == ModeBView.graph
+                ? const EdgeInsets.fromLTRB(12, 16, 16, 12)
+                : const EdgeInsets.symmetric(vertical: 4),
+            child: view == ModeBView.graph
+                ? ConversionChart(table: table, highlightRaw: raw)
+                : _ConversionTable(table: table, highlightRaw: raw),
           ),
         ),
         const SizedBox(height: 10),
@@ -294,68 +328,124 @@ class _ModeBView extends ConsumerWidget {
   }
 }
 
-class _LookupResult extends StatelessWidget {
-  const _LookupResult({required this.lookup});
-  final RawScoreLookup lookup;
+/// The single, prominent "raw → band" answer.
+class _BandResultCard extends StatelessWidget {
+  const _BandResultCard(
+      {required this.band, required this.moduleLabel, required this.raw});
+  final double band;
+  final String moduleLabel;
+  final int raw;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final color = AppTheme.bandColor(lookup.primaryBand, scheme);
-    String moduleLabel = lookup.primaryModule.label;
-    if (lookup.primaryModule == IeltsModule.reading && lookup.primaryVariant != null) {
-      moduleLabel = '${lookup.primaryVariant!.label} Reading';
-    }
+    final color = AppTheme.bandColor(band, scheme);
     return Card(
       color: color.withValues(alpha: 0.12),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        child: Row(
           children: [
-            Text.rich(
-              TextSpan(children: [
-                TextSpan(
-                    text: '${lookup.raw}/40 → ',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                TextSpan(
-                    text:
-                        '$moduleLabel Band ${IeltsScoring.formatBand(lookup.primaryBand)}',
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('BAND',
                     style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w800, color: color)),
-              ]),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.2,
+                        color: scheme.onSurfaceVariant)),
+                Text(
+                  IeltsScoring.formatBand(band),
+                  style: TextStyle(
+                      fontSize: 56, fontWeight: FontWeight.w800, color: color, height: 1),
+                ),
+              ],
             ),
-            const Divider(height: 20),
-            Text('Same raw score elsewhere',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurfaceVariant)),
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: lookup.comparisons.map((c) {
-                final cColor = AppTheme.bandColor(c.band, scheme);
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: scheme.surface.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text.rich(TextSpan(children: [
-                    TextSpan(text: '${c.label}: '),
-                    TextSpan(
-                      text: 'Band ${IeltsScoring.formatBand(c.band)}',
-                      style: TextStyle(fontWeight: FontWeight.w800, color: cColor),
-                    ),
-                  ])),
-                );
-              }).toList(),
+            const SizedBox(width: 20),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(moduleLabel,
+                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 2),
+                  Text('$raw of 40 correct',
+                      style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant)),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A compact raw-range → band table with the current score's row highlighted.
+class _ConversionTable extends StatelessWidget {
+  const _ConversionTable({required this.table, required this.highlightRaw});
+  final ConversionTable table;
+  final int highlightRaw;
+
+  String _rawRange(BandRange r) =>
+      r.rawMin == r.rawMax ? '${r.rawMin}' : '${r.rawMin}–${r.rawMax}';
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+          child: Row(
+            children: [
+              Expanded(
+                  child: Text('Raw score',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurfaceVariant))),
+              Text('Band',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: scheme.onSurfaceVariant)),
+            ],
+          ),
+        ),
+        for (final r in table.bands)
+          Builder(builder: (_) {
+            final isCurrent = r.contains(highlightRaw);
+            final color = AppTheme.bandColor(r.band, scheme);
+            return Container(
+              color: isCurrent ? color.withValues(alpha: 0.15) : null,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+              child: Row(
+                children: [
+                  if (isCurrent)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Icon(CupertinoIcons.arrow_right_circle_fill,
+                          size: 16, color: color),
+                    ),
+                  Expanded(
+                    child: Text('${_rawRange(r)} / 40',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: isCurrent ? FontWeight.w800 : FontWeight.w500)),
+                  ),
+                  Text(IeltsScoring.formatBand(r.band),
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: isCurrent ? color : scheme.onSurface)),
+                ],
+              ),
+            );
+          }),
+        const SizedBox(height: 6),
+      ],
     );
   }
 }
