@@ -91,4 +91,6 @@ final modeBRawProvider = StateProvider<int>((ref) => 30);
 /// Whether Mode B shows the conversion as a graph or a table.
 enum ModeBView { graph, table }
 
-final modeBViewProvider = StateProvider<ModeBView>((ref) => ModeBView.graph);
+/// Defaults to table; the persisted choice is applied at startup by
+/// [SettingsController] and updated via `setRawView`.
+final modeBViewProvider = StateProvider<ModeBView>((ref) => ModeBView.table);

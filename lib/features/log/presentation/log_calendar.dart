@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/exam/exam_registry.dart';
 import '../data/log_database.dart';
@@ -20,8 +21,19 @@ class LogCalendar extends ConsumerStatefulWidget {
 
 class _LogCalendarState extends ConsumerState<LogCalendar> {
   DateTime? _selected;
+  late DateTime _month; // first day of the displayed month
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _month = DateTime(now.year, now.month);
+  }
 
   static DateTime _dayKey(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  void _shiftMonth(int delta) =>
+      setState(() => _month = DateTime(_month.year, _month.month + delta));
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +51,15 @@ class _LogCalendarState extends ConsumerState<LogCalendar> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
           children: [
             _StreakBanner(streak: streak, totalDays: byDay.length),
+            const SizedBox(height: 16),
+            _MonthCalendar(
+              month: _month,
+              byDay: byDay,
+              selected: _selected,
+              onSelect: (d) => setState(() => _selected = d),
+              onPrev: () => _shiftMonth(-1),
+              onNext: () => _shiftMonth(1),
+            ),
             const SizedBox(height: 16),
             _Heatmap(
               byDay: byDay,
@@ -66,6 +87,177 @@ class _LogCalendarState extends ConsumerState<LogCalendar> {
       cursor = cursor.subtract(const Duration(days: 1));
     }
     return count;
+  }
+}
+
+/// A traditional month-grid calendar. Days with logged practice are tinted and
+/// dotted; the selected day is filled and today is outlined. Tapping a day
+/// selects it (shared with the day-detail panel below).
+class _MonthCalendar extends StatelessWidget {
+  const _MonthCalendar({
+    required this.month,
+    required this.byDay,
+    required this.selected,
+    required this.onSelect,
+    required this.onPrev,
+    required this.onNext,
+  });
+
+  final DateTime month; // first day of the displayed month
+  final Map<DateTime, List<LogEntry>> byDay;
+  final DateTime? selected;
+  final ValueChanged<DateTime> onSelect;
+  final VoidCallback onPrev;
+  final VoidCallback onNext;
+
+  static const _weekdayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final today = DateTime.now();
+    final todayKey = DateTime(today.year, today.month, today.day);
+
+    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    final leadingBlanks = DateTime(month.year, month.month, 1).weekday - 1; // Mon=0
+    final canGoNext = DateTime(month.year, month.month)
+        .isBefore(DateTime(today.year, today.month));
+
+    final cells = <Widget>[
+      for (int i = 0; i < leadingBlanks; i++) const SizedBox.shrink(),
+      for (int day = 1; day <= daysInMonth; day++)
+        _DayCell(
+          day: day,
+          dayKey: DateTime(month.year, month.month, day),
+          count: byDay[DateTime(month.year, month.month, day)]?.length ?? 0,
+          isToday: DateTime(month.year, month.month, day) == todayKey,
+          isSelected: selected == DateTime(month.year, month.month, day),
+          onTap: onSelect,
+          scheme: scheme,
+        ),
+    ];
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(CupertinoIcons.chevron_left, size: 20),
+                  onPressed: onPrev,
+                ),
+                Expanded(
+                  child: Text(
+                    DateFormat('MMMM yyyy').format(month),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(CupertinoIcons.chevron_right, size: 20),
+                  onPressed: canGoNext ? onNext : null,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                for (final w in _weekdayLabels)
+                  Expanded(
+                    child: Center(
+                      child: Text(w,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: scheme.onSurfaceVariant)),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            GridView.count(
+              crossAxisCount: 7,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: cells,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DayCell extends StatelessWidget {
+  const _DayCell({
+    required this.day,
+    required this.dayKey,
+    required this.count,
+    required this.isToday,
+    required this.isSelected,
+    required this.onTap,
+    required this.scheme,
+  });
+
+  final int day;
+  final DateTime dayKey;
+  final int count;
+  final bool isToday;
+  final bool isSelected;
+  final ValueChanged<DateTime> onTap;
+  final ColorScheme scheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasEntries = count > 0;
+    final Color bg;
+    final Color fg;
+    if (isSelected) {
+      bg = scheme.primary;
+      fg = scheme.onPrimary;
+    } else if (hasEntries) {
+      bg = scheme.primaryContainer;
+      fg = scheme.onPrimaryContainer;
+    } else {
+      bg = Colors.transparent;
+      fg = scheme.onSurface;
+    }
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: GestureDetector(
+        onTap: () => onTap(dayKey),
+        child: Container(
+          decoration: BoxDecoration(
+            color: bg,
+            shape: BoxShape.circle,
+            border: isToday && !isSelected
+                ? Border.all(color: scheme.primary, width: 1.5)
+                : null,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('$day',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: hasEntries ? FontWeight.w800 : FontWeight.w500,
+                      color: fg)),
+              if (hasEntries)
+                Container(
+                  margin: const EdgeInsets.only(top: 2),
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: isSelected ? scheme.onPrimary : scheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

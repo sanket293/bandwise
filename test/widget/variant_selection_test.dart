@@ -6,9 +6,11 @@ import 'package:bandwise/features/exams/ielts/domain/ielts_models.dart';
 import 'package:bandwise/features/exams/ielts/domain/rubric_models.dart';
 import 'package:bandwise/features/exams/ielts/presentation/ielts_providers.dart';
 import 'package:bandwise/features/exams/ielts/presentation/ielts_simulator_page.dart';
+import 'package:bandwise/features/settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, dynamic> _j(String p) =>
     jsonDecode(File(p).readAsStringSync()) as Map<String, dynamic>;
@@ -33,11 +35,14 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     final data = _loadData();
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           ieltsDataProvider.overrideWith((ref) async => data),
+          sharedPreferencesProvider.overrideWithValue(prefs),
         ],
         child: const MaterialApp(home: IeltsSimulatorPage()),
       ),

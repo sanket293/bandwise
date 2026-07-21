@@ -38,6 +38,7 @@ class SettingsController extends StateNotifier<AppSettings> {
   static const _kTheme = 'theme_mode';
   static const _kVariant = 'exam_variant';
   static const _kReward = 'reward_unlocked_date';
+  static const _kRawView = 'raw_view';
 
   void _load() {
     final theme = switch (_prefs.getString(_kTheme)) {
@@ -51,13 +52,22 @@ class SettingsController extends StateNotifier<AppSettings> {
       variantId: variant,
       rewardUnlockedDate: _prefs.getString(_kReward),
     );
-    // Keep the IELTS variant provider in sync at startup. Deferred to a
-    // microtask because a provider may not modify another provider during its
-    // own initialization (Riverpod throws an assertion otherwise). By the time
-    // the microtask runs, this provider has finished building.
+    final rawView =
+        _prefs.getString(_kRawView) == 'graph' ? ModeBView.graph : ModeBView.table;
+    // Sync dependent providers at startup. Deferred to a microtask because a
+    // provider may not modify another provider during its own initialization
+    // (Riverpod throws an assertion otherwise). By the time the microtask runs,
+    // this provider has finished building.
     Future.microtask(() {
       _ref.read(ieltsVariantProvider.notifier).state = IeltsVariant.fromId(variant);
+      _ref.read(modeBViewProvider.notifier).state = rawView;
     });
+  }
+
+  /// Persists and applies the Raw→Band view choice (graph vs table).
+  Future<void> setRawView(ModeBView view) async {
+    _ref.read(modeBViewProvider.notifier).state = view;
+    await _prefs.setString(_kRawView, view.name);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

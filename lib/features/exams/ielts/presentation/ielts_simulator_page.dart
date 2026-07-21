@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../settings/settings_controller.dart';
 import '../data/ielts_repository.dart';
 import '../domain/ielts_models.dart';
 import '../domain/ielts_scoring.dart';
@@ -306,7 +307,7 @@ class _ModeBView extends ConsumerWidget {
             ],
             selected: {view},
             onSelectionChanged: (s) =>
-                ref.read(modeBViewProvider.notifier).state = s.first,
+                ref.read(settingsProvider.notifier).setRawView(s.first),
           ),
         ),
         const SizedBox(height: 12),
