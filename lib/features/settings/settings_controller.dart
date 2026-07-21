@@ -51,8 +51,13 @@ class SettingsController extends StateNotifier<AppSettings> {
       variantId: variant,
       rewardUnlockedDate: _prefs.getString(_kReward),
     );
-    // Keep the IELTS variant provider in sync at startup.
-    _ref.read(ieltsVariantProvider.notifier).state = IeltsVariant.fromId(variant);
+    // Keep the IELTS variant provider in sync at startup. Deferred to a
+    // microtask because a provider may not modify another provider during its
+    // own initialization (Riverpod throws an assertion otherwise). By the time
+    // the microtask runs, this provider has finished building.
+    Future.microtask(() {
+      _ref.read(ieltsVariantProvider.notifier).state = IeltsVariant.fromId(variant);
+    });
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
