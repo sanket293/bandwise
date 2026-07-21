@@ -198,7 +198,8 @@ class _LogEntryEditorState extends ConsumerState<LogEntryEditor> {
                 decoration: const InputDecoration(hintText: 'Select band'),
                 items: [
                   const DropdownMenuItem(value: null, child: Text('— select —')),
-                  for (final b in _bandSteps)
+                  // Highest band first (9 → 0).
+                  for (final b in _bandSteps.reversed)
                     DropdownMenuItem(
                         value: b, child: Text('Band ${LogFormat.band(b)}')),
                 ],
