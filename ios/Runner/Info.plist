@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>BandWise</string>
+		<string>IELTS Band Score Calculator</string>
 		<!-- AdMob application ID. Google's official TEST app ID — replace with your
 	     real AdMob app ID before release (see lib/core/ads/ad_config.dart). -->
 		<key>GADApplicationIdentifier</key>

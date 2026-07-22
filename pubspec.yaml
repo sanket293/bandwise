@@ -74,13 +74,13 @@ flutter_launcher_icons:
 
 # --- Splash screen (run: dart run flutter_native_splash:create) ---
 flutter_native_splash:
-  color: "#1E9696"
-  color_dark: "#141B3C"
+  color: "#2C7A7B"
+  color_dark: "#1C5456"
   image: "assets/branding/splash_logo.png"
   image_dark: "assets/branding/splash_logo_dark.png"
   android_12:
     image: "assets/branding/splash_logo.png"
     image_dark: "assets/branding/splash_logo_dark.png"
-    color: "#1E9696"
-    color_dark: "#141B3C"
+    color: "#2C7A7B"
+    color_dark: "#1C5456"
   fullscreen: true

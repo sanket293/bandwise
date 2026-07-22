@@ -1,4 +1,4 @@
-package com.bandwise.bandwise
+package com.sanket.ieltsbandcalculator
 
 import io.flutter.embedding.android.FlutterActivity
 
