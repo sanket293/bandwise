@@ -188,7 +188,9 @@ class _PerModuleSummary extends StatelessWidget {
             final first = list.first.bandScore!;
             final last = list.last.bandScore!;
             final delta = last - first;
-            return Card(
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Card(
               child: ListTile(
                 dense: true,
                 title: Text(fmt.moduleLabel(entry.key),
@@ -217,6 +219,7 @@ class _PerModuleSummary extends StatelessWidget {
                         ],
                       ),
               ),
+            ),
             );
           }),
       ],
