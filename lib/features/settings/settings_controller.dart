@@ -8,7 +8,7 @@ import '../exams/ielts/presentation/ielts_providers.dart';
 /// Lightweight app settings, persisted with shared_preferences.
 class AppSettings {
   const AppSettings({
-    this.themeMode = ThemeMode.system,
+    this.themeMode = ThemeMode.dark,
     this.variantId = 'academic',
     this.rewardUnlockedDate,
   });
@@ -44,7 +44,8 @@ class SettingsController extends StateNotifier<AppSettings> {
     final theme = switch (_prefs.getString(_kTheme)) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
-      _ => ThemeMode.system,
+      'system' => ThemeMode.system,
+      _ => ThemeMode.dark, // default to dark until the user picks a theme
     };
     final variant = _prefs.getString(_kVariant) ?? 'academic';
     state = state.copyWith(
