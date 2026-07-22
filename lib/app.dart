@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
-import 'features/home/home_shell.dart';
 import 'features/settings/settings_controller.dart';
+import 'features/splash/splash_screen.dart';
 
 class BandWiseApp extends ConsumerWidget {
   const BandWiseApp({super.key});
@@ -17,7 +17,7 @@ class BandWiseApp extends ConsumerWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: themeMode,
-      home: const HomeShell(),
+      home: const SplashScreen(),
     );
   }
 }
