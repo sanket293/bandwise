@@ -1,0 +1,12 @@
+# Copy this file to android/key.properties and fill in your real values.
+# android/key.properties is gitignored — never commit it or your .jks keystore.
+#
+# Generate a keystore (once) with:
+#   keytool -genkey -v -keystore ~/ielts-upload-key.jks \
+#     -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+# Absolute path to your .jks (or relative to the android/ folder):
+storeFile=/Users/shivay/ielts-upload-key.jks

@@ -10,7 +10,10 @@ class AdConfig {
   AdConfig._();
 
   /// Flip to false and fill in the real IDs below for a production build.
-  static const bool useTestIds = true;
+  ///
+  /// NOTE: Android is live with real IDs. iOS prod IDs are still placeholders,
+  /// so iOS ads will not serve until those are filled in (see below).
+  static const bool useTestIds = false;
 
   // --- Test unit IDs (from https://developers.google.com/admob) ---
   static const _testBannerAndroid = 'ca-app-pub-3940256099942544/6300978111';
@@ -20,12 +23,14 @@ class AdConfig {
   static const _testRewardedAndroid = 'ca-app-pub-3940256099942544/5224354917';
   static const _testRewardedIos = 'ca-app-pub-3940256099942544/1712485313';
 
-  // --- TODO: real unit IDs for production ---
-  static const _prodBannerAndroid = 'YOUR_ANDROID_BANNER_ID';
+  // --- Real unit IDs for production ---
+  // Android: live AdMob IDs (app ID ca-app-pub-5132757141594041~7089197018).
+  static const _prodBannerAndroid = 'ca-app-pub-5132757141594041/3342552001';
+  static const _prodAppOpenAndroid = 'ca-app-pub-5132757141594041/7557129188';
+  static const _prodRewardedAndroid = 'ca-app-pub-5132757141594041/2466518837';
+  // iOS: TODO — real IDs still pending before App Store publish.
   static const _prodBannerIos = 'YOUR_IOS_BANNER_ID';
-  static const _prodAppOpenAndroid = 'YOUR_ANDROID_APP_OPEN_ID';
   static const _prodAppOpenIos = 'YOUR_IOS_APP_OPEN_ID';
-  static const _prodRewardedAndroid = 'YOUR_ANDROID_REWARDED_ID';
   static const _prodRewardedIos = 'YOUR_IOS_REWARDED_ID';
 
   static String get bannerUnitId => _pick(

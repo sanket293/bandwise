@@ -7,11 +7,10 @@
         android:label="IELTS Band Score Calculator"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- AdMob application ID. This is Google's official TEST app ID — replace
-             with your real AdMob app ID before release (see lib/core/ads/ad_config.dart). -->
+        <!-- Real AdMob application ID (see lib/core/ads/ad_config.dart). -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-5132757141594041~7089197018"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

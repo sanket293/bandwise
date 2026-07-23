@@ -1,7 +1,7 @@
 name: bandwise
 description: "BandWise — offline-first exam score simulator & prep tracker (IELTS-first, multi-exam by design)."
 publish_to: 'none'
-version: 1.0.0+1
+version: 2.2.0+6
 
 environment:
   sdk: ^3.10.0
@@ -74,13 +74,13 @@ flutter_launcher_icons:
 
 # --- Splash screen (run: dart run flutter_native_splash:create) ---
 flutter_native_splash:
-  color: "#2C7A7B"
+  color: "#3A9C9C"
   color_dark: "#1C5456"
   image: "assets/branding/splash_logo.png"
   image_dark: "assets/branding/splash_logo_dark.png"
   android_12:
     image: "assets/branding/splash_logo.png"
     image_dark: "assets/branding/splash_logo_dark.png"
-    color: "#2C7A7B"
+    color: "#3A9C9C"
     color_dark: "#1C5456"
   fullscreen: true
