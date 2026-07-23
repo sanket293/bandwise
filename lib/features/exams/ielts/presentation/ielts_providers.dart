@@ -25,7 +25,7 @@ class ModuleBands {
   const ModuleBands({
     this.listening = 6.5,
     this.reading = 6.5,
-    this.writing = 6.0,
+    this.writing = 6.5,
     this.speaking = 6.5,
   });
 
